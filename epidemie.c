@@ -93,8 +93,7 @@ void initialiser_agents(Individu *agents) {
         a->statut = S;
         a->timer  = 0;
 
-        /* Durees personnelles tirees une seule fois a la creation.
-         * Le +1 garantit une duree minimale de 1 jour. */
+        /* Durees personnelles tirees une seule fois a la creation. Le +1 garantit une duree minimale de 1 jour. */
         a->dE = (int)neg_exp(MOYENNE_dE) + 1;
         a->dI = (int)neg_exp(MOYENNE_dI) + 1;
         a->dR = (int)neg_exp(MOYENNE_dR) + 1;
@@ -106,7 +105,8 @@ void initialiser_agents(Individu *agents) {
         do {
             index = rand_int(0, NB_AGENTS - 1);
         } while (agents[index].statut == I);
-        agents[index].statut = I;
+        Individu *b = &agent[index]
+        b -> statut = I;
     }
 }
 
