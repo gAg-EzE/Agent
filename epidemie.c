@@ -72,10 +72,8 @@ static inline int rand_int(int A, int B) {
  * Le while evite log(0) si rand() retourne 0 */
 static inline double neg_exp(double moyenne) {
     double u = rand01();
-    while (u == 0.0) {
-        u = rand01();
-    }
-    return -moyenne * log(u);
+    while (u == 1.0) u = rand01();
+    return -moyenne * log(1-u);
 }
 
 /* ================================================================
@@ -105,7 +103,7 @@ void initialiser_agents(Individu *agents) {
         do {
             index = rand_int(0, NB_AGENTS - 1);
         } while (agents[index].statut == I);
-        Individu *b = &agent[index]
+        Individu *b = &agents[index];
         b -> statut = I;
     }
 }
@@ -257,7 +255,7 @@ int main(void) {
 
     initialiser_agents(agents);
 
-    printf("jour,S,E,I,R\n");
+    //printf("jour,S,E,I,R\n");
 
     struct timespec debut, fin;
     clock_gettime(CLOCK_MONOTONIC, &debut);
@@ -265,7 +263,7 @@ int main(void) {
     for (int jour = 0; jour < NB_JOURS; jour++) {
         int nS, nE, nI, nR;
         compter_etats(agents, &nS, &nE, &nI, &nR);
-        printf("%d,%d,%d,%d,%d\n", jour, nS, nE, nI, nR);
+        //printf("%d,%d,%d,%d,%d\n", jour, nS, nE, nI, nR);
         simuler_un_jour(agents);
     }
 
@@ -277,4 +275,20 @@ int main(void) {
 
     free(agents);
     return 0;
+    /*
+    FILE *f = fopen("resultats.csv", "w");
+    fprintf(f, "jour,S,E,I,R\n");
+
+    for (int jour = 0; jour < NB_JOURS; jour++) {
+        int nS, nE, nI, nR;
+
+        compter_etats(agents, &nS, &nE, &nI, &nR);
+
+        fprintf(f, "%d,%d,%d,%d,%d\n", jour, nS, nE, nI, nR);
+
+        simuler_un_jour(agents);
+    }
+
+    fclose(f);
+    */
 }
